@@ -20,12 +20,14 @@ var logRequests = function (req, res, next) {
 //Tell Express to use this middleware before each of the subsequent routes defined  
 app.use(logRequests)
 
+app.use(express.static('public'))
+
 //Serve the homepage
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/public/index.html')
 })
 
-app.use(express.static('public'))
+
 
 //Return JSON list of messages
 app.get('/messages', (req, res) => {
