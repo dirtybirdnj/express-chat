@@ -34,15 +34,49 @@ app.get('/', (req, res) => {
 
 //Return JSON list of messages
 app.get('/messages', (req, res) => {
-    res.json(messages)
+    
+    //Original memory based storage, just passing the global messages array
+    //res.json(messages)
+
+    //NEW - MongoDB driven storage, passing back results from the database
+    db.collection('messages').find().toArray((err, messages) => {
+      if (err) return console.log(err)
+
+      res.json(messages)
+
+    })
+
 })
 
 //Save a new message, don't return any JSON just redirect the user!
 app.post('/messages', (req, res) => {
 
-    req.body.createdAt = moment().toString()
-    messages.push(req.body)
+  //Add anything additional to the message that we don't want to allow the user to dictate
+  req.body.createdAt = moment().toString()
+  
+  //Old memory-based way of "saving" data
+  //messages.push(req.body)
+  
+  //Single purpose endpoint! POST @ /messages ONLY saves data, use GET @ /messages to retrieve.
+  //res.json({})
+
+  //NEW - Saving the req.body payload (see main.js sendMessage() function) to the collection
+  db.collection('messages').save(req.body, (err, result) => {
+    if (err) return console.log(err)
+
+
+    console.log('----- VV MongoDB response to db.collection().save() VV -----')
+    console.log(result)
+    console.log('----- ^^ MongoDB response to db.collection().save() ^^ -----')
+
+    //Empty JSON response means NO error!
     res.json({})
+
+  })
+
+
+
+
 })
 
 MongoClient.connect(process.env.MONGO_URL,{ useNewUrlParser: true } ,(err, client) => {
