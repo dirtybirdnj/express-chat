@@ -5,6 +5,7 @@ const moment = require('moment')
 const app = express();
 
 app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
 
 let messages = [];
 
@@ -14,7 +15,7 @@ console.log('Server is starting up')
 var logRequests = function (req, res, next) {
     console.log(`${req.method} @ ${req.url}`)
     next()
-  }
+}
 
 //Tell Express to use this middleware before each of the subsequent routes defined  
 app.use(logRequests)
@@ -50,7 +51,10 @@ app.post('/messages', (req, res) => {
 
     //Respond to client with an "empty" response of 200
     //"Things worked, but I have nothing to tell you other than that things worked"
-    res.send()
+    //res.send()
+
+    //APPARENTLY... doing the means that the client gets unparseable JSON, oops!
+    res.json({})
 })
 
 

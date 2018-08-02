@@ -8,27 +8,61 @@ let bodyInput = document.getElementById('body')
 
 newMessageForm.addEventListener('submit', (event) => {
 
-  
-  btnLoadMessages.click()
-  return false
+  event.preventDefault()
+  sendMessage()
 
 })
 
 btnLoadMessages.addEventListener('click', (event) => {
 
-    fetch('messages')
-    .then(function(response) {
-      return response.json()
-    })
-    .then(function(messagesJson) {
-      
-      console.log(messagesJson)
-
-      displayLatestMessages(messagesJson)
-    });    
-
+    getMessages()
 
 })
+
+function getMessages(){
+
+  fetch('messages')
+  .then(function(response) {
+    return response.json()
+  })
+  .then(function(messagesJson) {
+    
+    console.log(messagesJson)
+
+    displayLatestMessages(messagesJson)
+  });    
+
+}
+
+function sendMessage(){
+
+  let newMessagePayload = {
+    username: userNameInput.value,
+    body: bodyInput.value,
+    room: roomInput.value
+  }
+
+  fetch( 'messages', 
+
+    { 
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newMessagePayload)
+    }
+  
+  ).then( response => response.json() ).then( ( response ) => {
+
+        //When creating a new message, server just responds with 200 and no payload to indicate success
+        console.log(response)
+
+        //getMessages makes its own fetch to 
+        getMessages()
+
+  } )
+
+}
 
 function displayLatestMessages(messageList){
 
