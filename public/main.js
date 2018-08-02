@@ -26,10 +26,9 @@ function getMessages(){
     return response.json()
   })
   .then(function(messagesJson) {
-    
-    console.log(messagesJson)
 
     displayLatestMessages(messagesJson)
+
   });    
 
 }
@@ -54,10 +53,6 @@ function sendMessage(){
   
   ).then( response => response.json() ).then( ( response ) => {
 
-        //When creating a new message, server just responds with 200 and no payload to indicate success
-        console.log(response)
-
-        //getMessages makes its own fetch to 
         getMessages()
 
   } )
