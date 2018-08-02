@@ -1,0 +1,28 @@
+{
+  "name": "express-chat",
+  "version": "1.0.0",
+  "description": "A simple chat server using Express and MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "prod": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dirtybirdnj/express-chat.git"
+  },
+  "author": "Mat Gilbert <matgilbert@gmail.com> (http://www.matgilbert.com)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dirtybirdnj/express-chat/issues"
+  },
+  "homepage": "https://github.com/dirtybirdnj/express-chat#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.3",
+    "moment": "^2.22.2",
+    "mongodb": "^3.1.1",
+    "nodemon": "^1.18.3"
+  }
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Express Chat</title>
+</head>
+<body>
+  <h1>Express Chat</h1>
+  <p>Talk to other people in multiple chat rooms!</p>
+
+  <div id="chatWrapper">
+
+    <p>Room: <span id="roomName">general</span></p>
+
+    <div id="messages">
+        <p>No chat messages yet, send one!</p>
+    </div>
+
+    <div id="form">
+    
+        <form method="POST" action="messages" id="newMessageForm">
+            <p>Username: <input type="text" name="username" id="username" /></p>
+            <p>Message: <input type="text" name="body" id="body" /></p>
+            
+            <input type="hidden" id="room" name="room" value="general"/>
+            <input type="submit" value="Submit" />
+        </form>
+
+        <button id="loadMessages">Load Messages</button>
+    
+    </div>
+
+  </div>
+
+</body>
+<script type="text/javascript" src="main.js"></script>
+</html>
