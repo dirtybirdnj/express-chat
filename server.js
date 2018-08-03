@@ -56,7 +56,7 @@ app.get('/messages', (req, res) => {
 //Save a new message, don't return any JSON just redirect the user!
 app.post('/messages', (req, res) => {
 
-  //Add anything additional to the message doc that we don't want to allow the user to dictate
+  //Add anything additional to the message doc  that we don't want to allow the user to dictate
   req.body.createdAt = moment().toString()
   
   db.collection('messages').save(req.body, (err, result) => {
