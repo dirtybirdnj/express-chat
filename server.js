@@ -1,15 +1,14 @@
+require('dotenv').config()
 const express = require('express')
 const bodyParser = require('body-parser')
 const moment = require('moment')
+const MongoClient = require('mongodb').MongoClient
 
-const app = express();
+const app = express()
+let db
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
-
-let messages = [];
-
-console.log('Server is starting up')
 
 //Show a message displaying the path & method in the console for each request the server recieves
 var logRequests = function (req, res, next) {
@@ -24,43 +23,53 @@ app.use(express.static('public'))
 
 //Serve the homepage
 app.get('/', (req, res) => {
+
     res.sendFile(__dirname + '/public/index.html')
-})
+
+  })
 
 
 
 //Return JSON list of messages
 app.get('/messages', (req, res) => {
     
-    //This does not convert to JSON!
-    //res.send(messages)
+    db.collection('messages').find().toArray((err, messages) => {
+      
+      if (err) return console.log(err)
+      res.json(messages)
 
-    res.json(messages)
+    })
+
 })
 
 //Save a new message, don't return any JSON just redirect the user!
 app.post('/messages', (req, res) => {
 
-    req.body.createdAt = moment().toString()
-
-    messages.push(req.body)
-    
-    //Send the current "state" of the application back
-    //res.send(messages)
-
-    //Redirect the user back to the homepage
-    //res.redirect('/')
-
-    //Respond to client with an "empty" response of 200
-    //"Things worked, but I have nothing to tell you other than that things worked"
-    //res.send()
-
-    //APPARENTLY... doing the means that the client gets unparseable JSON, oops!
+  //Add anything additional to the message that we don't want to allow the user to dictate
+  req.body.createdAt = moment().toString()
+  
+  db.collection('messages').save(req.body, (err, result) => {
+    if (err) return console.log(err)
     res.json({})
+
+  })
+
+})
+
+MongoClient.connect(process.env.MONGO_URL,{ useNewUrlParser: true } ,(err, client) => {
+  
+  if (err){
+    console.log('Error connecting to MongoDB!')
+    return console.log(err)
+  } 
+  
+  db = client.db('express-chat') // whatever your database name is
+  
+  app.listen(3000, () => {
+      console.log('Server is running! listening on 3000')
+  })
+
 })
 
 
-app.listen(3000, function() {
-    console.log('Server is running! listening on 3000')
-})
 
