@@ -3,12 +3,15 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const moment = require('moment')
 const MongoClient = require('mongodb').MongoClient
+const exphbs = require('express-handlebars');
 
 const app = express()
 let db
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
+app.engine('handlebars', exphbs())
+app.set('view engine', 'hbs')
 
 //Show a message displaying the path & method in the console for each request the server recieves
 var logRequests = function (req, res, next) {
@@ -24,9 +27,10 @@ app.use(express.static('public'))
 //Serve the homepage
 app.get('/', (req, res) => {
 
-    res.sendFile(__dirname + '/public/index.html')
+    //res.sendFile(__dirname + '/public/index.html')
+    res.render('home')
 
-  })
+})
 
 
 
