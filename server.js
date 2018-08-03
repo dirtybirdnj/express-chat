@@ -54,9 +54,6 @@ app.post('/messages', (req, res) => {
 
   })
 
-
-
-
 })
 
 MongoClient.connect(process.env.MONGO_URL,{ useNewUrlParser: true } ,(err, client) => {
