@@ -10,8 +10,9 @@ let db
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
-app.engine('handlebars', exphbs())
-app.set('view engine', 'hbs')
+
+app.engine('.hbs', exphbs({extname: '.hbs', defaultLayout: 'main'}));
+app.set('view engine', '.hbs');
 
 //Show a message displaying the path & method in the console for each request the server recieves
 var logRequests = function (req, res, next) {
@@ -22,13 +23,19 @@ var logRequests = function (req, res, next) {
 //Tell Express to use this middleware before each of the subsequent routes defined  
 app.use(logRequests)
 
-app.use(express.static('public'))
+
 
 //Serve the homepage
 app.get('/', (req, res) => {
 
-    //res.sendFile(__dirname + '/public/index.html')
-    res.render('home')
+    db.collection('messages').find().toArray((err, messages) => {
+      
+      if (err) return console.log(err)
+
+      //Serve template with additional values passed to .hbs files
+      res.render('home', { messages : messages })
+
+    })
 
 })
 
@@ -49,7 +56,7 @@ app.get('/messages', (req, res) => {
 //Save a new message, don't return any JSON just redirect the user!
 app.post('/messages', (req, res) => {
 
-  //Add anything additional to the message that we don't want to allow the user to dictate
+  //Add anything additional to the message doc that we don't want to allow the user to dictate
   req.body.createdAt = moment().toString()
   
   db.collection('messages').save(req.body, (err, result) => {
@@ -59,6 +66,8 @@ app.post('/messages', (req, res) => {
   })
 
 })
+
+app.use(express.static('public'))
 
 MongoClient.connect(process.env.MONGO_URL,{ useNewUrlParser: true } ,(err, client) => {
   

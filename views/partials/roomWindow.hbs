@@ -1,0 +1,14 @@
+
+<p><strong>room:</strong> <span id="roomName">general</span></p>
+
+<div id="messages">
+
+    {{#each messages}}
+        <p>{{ this.username }} - {{ this.body }}</p>
+    {{else}}
+        <p>No chat messages yet, send one!</p>
+    {{/each}}
+    
+</div>
+
+

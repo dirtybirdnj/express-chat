@@ -54,6 +54,7 @@ function sendMessage(){
   ).then( response => response.json() ).then( ( response ) => {
 
         getMessages()
+        bodyInput.value = ''
 
   } )
 
