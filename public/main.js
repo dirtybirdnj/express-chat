@@ -1,5 +1,4 @@
 let newMessageForm = document.getElementById('newMessageForm')
-let btnLoadMessages = document.getElementById('loadMessages')
 let messagesDisplay = document.getElementById('messages')
 
 let userNameInput = document.getElementById('username')
@@ -10,12 +9,6 @@ newMessageForm.addEventListener('submit', (event) => {
 
   event.preventDefault()
   sendMessage()
-
-})
-
-btnLoadMessages.addEventListener('click', (event) => {
-
-    getMessages()
 
 })
 
@@ -54,6 +47,7 @@ function sendMessage(){
   ).then( response => response.json() ).then( ( response ) => {
 
         getMessages()
+        bodyInput.value = ''
 
   } )
 
